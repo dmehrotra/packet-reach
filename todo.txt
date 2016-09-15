@@ -1,0 +1,5 @@
+-trying to calculate the distance a signal travels to get to the destination server
+--how many packets in a get request
+--- sudo tcpdump -w test.cap -n src port 80 | grep packets
+--- curl input
+--- sudo killall tcpdump
