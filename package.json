@@ -11,6 +11,7 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "locus": "^1.2.0",
+    "prompt": "^1.0.0",
     "request": "^2.74.0",
     "underscore": "^1.8.3"
   }
