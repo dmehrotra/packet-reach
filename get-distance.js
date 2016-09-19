@@ -103,11 +103,7 @@ function build_network_hop(ip){
 				console.log("country: " + hop.country);
 				console.log("zip: " + hop.zip);
 				network_hops.push(hop)
-				console.log("--------------------------------")
-				
-
-				
-				
+				console.log("--------------------------------")	
 			}else{
 	    		return false;
 	    	}
