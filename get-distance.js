@@ -5,29 +5,28 @@ var network_hops = []
 var total = 0;
 var prompt = require('prompt');
 
-
+// Run a command prompt
 prompt.start();
 
 prompt.get(['please enter a website'], function (err, result) {
 	if (err) { return onErr(err); }
+	// Get user input
 	website = result['please enter a website']
 	console.log("--------------------------------")
 	console.log("sniffing packets sent to "+ website)
 	console.log("--------------------------------")
-	
+	//Start tcpdump listening on port 80
 	execute("tcpdump -n src port 80",function(output){
 		// get the total amount of packets sent by splitting the tcpdump output 
 		packet_length = output.split("length").length
+		// some formatting
 		console.log("--------------------------------")
 		console.log("total packets: " + packet_length)
 		console.log("--------------------------------")
-
 		console.log("--------------------------------")
 		console.log("----determining network hops----")
 		console.log("--------------------------------")
-		console.log("s-o-m-e-t-i-m-e-s--t-h-i-s--t-a-k-e-s--a--w-h-i-l-e-")
-		// perform traceroute to get the hops from my computer to the destination
-
+		// execute trace route wiht parameters to optimize script
 		execute("traceroute -w 1 -q 1 -m 16 "+website,function(tr){
 			// loop through traceroute output and store each IP address in the IP variable
 			_.each(tr.split(" "),function(x){
@@ -36,7 +35,6 @@ prompt.get(['please enter a website'], function (err, result) {
 				}
 			})
 			// this is a bad way to do this, but for now...
-			
 			setTimeout(function(){ 
 				_.each(network_hops,function(nh, i){	
 					if (i>0){
@@ -47,21 +45,21 @@ prompt.get(['please enter a website'], function (err, result) {
 					console.log("packet has now travelled: " + total +" miles")
 				})
 			}, 7000);
-			
 		})
 	})
-
+	// curl the website so tcpdump has something to sniff
 	execute("curl "+website,function(w){
-		setTimeout(function(){ console.log("stopping tcp"); execute("killall tcpdump",function(p){}); }, 3000);
+		setTimeout(function(){ execute("killall tcpdump",function(p){}); }, 3000);
 	})
 
 });
+
+//functional scripts
 
 function onErr(err) {
 	console.log(err);
 	return 1;
 }
-
 
 function execute(command, callback){
     exec(command, function(error, stdout, stderr){ callback(stdout); });
@@ -78,34 +76,27 @@ function build_network_hop(ip){
 	        	return false;
 	        } 
 		    if(json && json.lat != undefined){
-				
 				hop.isp = json.isp;
 				hop.lat = json.lat;
 				hop.lon = json.lon;
 				hop.zip = json.zip;
 				hop.city = json.city;
 				hop.country = json.country;
-				
 				console.log("------ hop ------");
 				console.log("isp: " + hop.isp);
 				console.log("lat/lng: " + hop.lat + "/" + hop.lon);
 				console.log("city: " + hop.city);
 				console.log("country: " + hop.country);
 				console.log("zip: " + hop.zip);
-				
 				network_hops.push(hop)
-				
-				
 			}else{
 	    		return false;
 	    	}
 		}
 	});
-	
 }
 
 function distance(lat1, lon1, lat2, lon2, unit) {
-
 	var radlat1 = Math.PI * lat1/180
 	var radlat2 = Math.PI * lat2/180
 	var theta = lon1-lon2
