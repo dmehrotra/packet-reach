@@ -12,20 +12,32 @@ prompt.get(['please enter a website'], function (err, result) {
 	if (err) { return onErr(err); }
 	// Get user input
 	website = result['please enter a website']
+	console.log("")
+	console.log("")
 	console.log("--------------------------------")
-	console.log("sniffing packets sent to "+ website)
+	console.log("--------------------------------")
+	console.log("--------------------------------")
+	console.log("sniffing packets to "+ website)
+	console.log("--------------------------------")
+	console.log("--------------------------------")
 	console.log("--------------------------------")
 	//Start tcpdump listening on port 80
 	execute("tcpdump -n src port 80",function(output){
 		// get the total amount of packets sent by splitting the tcpdump output 
 		packet_length = output.split("length").length
 		// some formatting
-		console.log("--------------------------------")
+		console.log("")
+		console.log("")
 		console.log("total packets: " + packet_length)
+		console.log("")
+		console.log("")
+		console.log("********************************")
 		console.log("--------------------------------")
 		console.log("--------------------------------")
 		console.log("----determining network hops----")
 		console.log("--------------------------------")
+		console.log("--------------------------------")
+		console.log("********************************")
 		// execute trace route wiht parameters to optimize script
 		execute("traceroute -w 1 -q 1 -m 16 "+website,function(tr){
 			// loop through traceroute output and store each IP address in the IP variable
@@ -43,6 +55,7 @@ prompt.get(['please enter a website'], function (err, result) {
 						total = d + total;
 					}
 					console.log("packet has now travelled: " + total +" miles")
+					console.log("")
 				})
 			}, 7000);
 		})
@@ -82,13 +95,19 @@ function build_network_hop(ip){
 				hop.zip = json.zip;
 				hop.city = json.city;
 				hop.country = json.country;
-				console.log("------ hop ------");
+				console.log("")
+				console.log("----------h----o----p-----------")
 				console.log("isp: " + hop.isp);
 				console.log("lat/lng: " + hop.lat + "/" + hop.lon);
 				console.log("city: " + hop.city);
 				console.log("country: " + hop.country);
 				console.log("zip: " + hop.zip);
 				network_hops.push(hop)
+				console.log("--------------------------------")
+				
+
+				
+				
 			}else{
 	    		return false;
 	    	}
